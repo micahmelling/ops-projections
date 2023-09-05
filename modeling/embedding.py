@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pandas as pd
 from keras import models
 from keras.layers import Dense, Embedding, Flatten
@@ -18,7 +20,6 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, Y):
         for col in self.columns:
             le = LabelEncoder()
-            from copy import deepcopy
             X_ = deepcopy(X)
             Y_ = deepcopy(Y)
             Y_ = Y_.values
@@ -49,7 +50,6 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
             return self
 
     def transform(self, X, Y=None):
-        print(self.mapping_dict)
         for col in self.columns:    
             X[col] = X[col].map(self.mapping_dict)
         return X
