@@ -47,7 +47,7 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
             output_embeddings_df[col] = le.inverse_transform(output_embeddings_df[col])
             feature_dict = dict(zip(output_embeddings_df[col], output_embeddings_df['embedding']))
             self.mapping_dict.update(feature_dict)
-            return self
+        return self
 
     def transform(self, X, Y=None):
         for col in self.columns:    
