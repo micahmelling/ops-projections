@@ -17,6 +17,7 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
         self.epochs = epochs
         self.batch_size = batch_size
 
+    # this assumes category levels are unique across columns. if this assumotion does not hold, the mapping_dict can be adjusted to handle
     def fit(self, X, Y):
         for col in self.columns:
             le = LabelEncoder()
