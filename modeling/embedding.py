@@ -11,14 +11,13 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
     """
     Encodes categorical features as a numeric embedding space.
     """
+
     def __init__(self, columns, epochs=5, batch_size=3):
         self.mapping_dict = {}
         self.columns = columns
         self.epochs = epochs
         self.batch_size = batch_size
 
-    # this assumes category levels are unique across columns. if this assumption 
-    # does not hold, the mapping_dict can be adjusted to handle
     def fit(self, X, Y):
         for col in self.columns:
             le = LabelEncoder()
@@ -48,10 +47,12 @@ class EmbeddingsEncoder(BaseEstimator, TransformerMixin):
             output_embeddings_df.columns = [col, 'embedding']
             output_embeddings_df[col] = le.inverse_transform(output_embeddings_df[col])
             feature_dict = dict(zip(output_embeddings_df[col], output_embeddings_df['embedding']))
+            feature_dict = {col: feature_dict}
             self.mapping_dict.update(feature_dict)
         return self
 
     def transform(self, X, Y=None):
-        for col in self.columns:    
-            X[col] = X[col].map(self.mapping_dict)
+        for col in self.columns:
+            col_dict = self.mapping_dict.get(col)
+            X[col] = X[col].map(col_dict)
         return X
